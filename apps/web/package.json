@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "vite --host :: --port 3000",
-    "build": "node -e \"const fs=require('fs'); if (fs.existsSync('tools/generate-llms.js')) { require('child_process').execSync('node tools/generate-llms.js', { stdio: 'inherit' }); } else { console.log('Skipping llms generation'); }\" && vite build --outDir ../../dist/apps/web",
-    "start": "vite preview --outDir ../../dist/apps/web --host :: --port 3000",
+    "build": "node -e \"const fs=require('fs'); if (fs.existsSync('tools/generate-llms.js')) { require('child_process').execSync('node tools/generate-llms.js', { stdio: 'inherit' }); } else { console.log('Skipping llms generation'); }\" && vite build",
+    "start": "vite preview --host :: --port 3000",
     "lint": "eslint . --quiet",
     "lint:warn": "eslint ."
   },
