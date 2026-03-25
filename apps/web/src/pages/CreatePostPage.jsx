@@ -13,6 +13,7 @@ import Footer from '../components/Footer';
 import RichTextEditor from '../components/RichTextEditor.jsx';
 import pb from '../lib/pocketbaseClient';
 import { toast } from 'sonner';
+import { BLOG_CATEGORIES, DEFAULT_BLOG_CATEGORY } from '../lib/blogCategories';
 
 const CreatePostPage = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const CreatePostPage = () => {
     excerpt: '',
     content: '',
     author: 'Permatable Team',
-    category: 'Permaculture',
+    category: DEFAULT_BLOG_CATEGORY,
     published: false
   });
   const [featuredImage, setFeaturedImage] = useState(null);
@@ -193,9 +194,9 @@ const CreatePostPage = () => {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Permaculture">Permaculture</SelectItem>
-                          <SelectItem value="Composting">Composting</SelectItem>
-                          <SelectItem value="Tips">Tips</SelectItem>
+                          {BLOG_CATEGORIES.map((category) => (
+                            <SelectItem key={category} value={category}>{category}</SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>

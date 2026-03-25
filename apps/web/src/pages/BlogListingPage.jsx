@@ -7,6 +7,7 @@ import SearchBar from '../components/SearchBar';
 import CategoryFilter from '../components/CategoryFilter';
 import PaginationComponent from '../components/PaginationComponent';
 import pb from '../lib/pocketbaseClient';
+import { ALL_BLOG_CATEGORIES, buildAllowedCategoriesFilter, buildCategoryFilter } from '../lib/blogCategories';
 
 const BlogListingPage = () => {
   const [posts, setPosts] = useState([]);
@@ -14,21 +15,24 @@ const BlogListingPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState(ALL_BLOG_CATEGORIES);
   const postsPerPage = 10;
 
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     try {
-      let filter = 'published = true';
-      
-      if (selectedCategory !== 'All') {
-        filter += ` && category = "${selectedCategory}"`;
+      const filters = ['published = true', buildAllowedCategoriesFilter()];
+
+      if (selectedCategory !== ALL_BLOG_CATEGORIES) {
+        filters.push(buildCategoryFilter(selectedCategory));
       }
-      
+
       if (searchTerm) {
-        filter += ` && (title ~ "${searchTerm}" || excerpt ~ "${searchTerm}")`;
+        const escapedSearchTerm = searchTerm.replace(/"/g, '\\"');
+        filters.push(`(title ~ "${escapedSearchTerm}" || excerpt ~ "${escapedSearchTerm}")`);
       }
+
+      const filter = filters.filter(Boolean).join(' && ');
 
       const result = await pb.collection('blog_posts').getList(currentPage, postsPerPage, {
         filter,
@@ -70,7 +74,7 @@ const BlogListingPage = () => {
     <>
       <Helmet>
         <title>Blog - Permatable</title>
-        <meta name="description" content="Explore our collection of articles on permaculture, composting, and sustainable living practices." />
+        <meta name="description" content="Explore our collection of articles on compost, permaculture, and soil health." />
       </Helmet>
 
       <div className="min-h-screen flex flex-col">

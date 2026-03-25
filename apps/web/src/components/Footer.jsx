@@ -14,7 +14,7 @@ const Footer = () => {
               <span className="text-2xl font-bold">Permatable</span>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              Sustainable living through permaculture and composting education.
+              Practical education on compost, permaculture, and soil health.
             </p>
           </div>
 

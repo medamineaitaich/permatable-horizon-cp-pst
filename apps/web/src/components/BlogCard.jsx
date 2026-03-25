@@ -5,11 +5,13 @@ import { Badge } from './ui/badge';
 import { Calendar, Eye } from 'lucide-react';
 import pb from '../lib/pocketbaseClient';
 import { format } from 'date-fns';
+import { normalizeBlogCategory } from '../lib/blogCategories';
 
 const BlogCard = ({ post }) => {
   const imageUrl = post.featured_image 
     ? pb.files.getUrl(post, post.featured_image)
     : 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800';
+  const categoryLabel = normalizeBlogCategory(post.category) || post.category;
 
   return (
     <Link to={`/blog/${post.slug}`}>
@@ -24,7 +26,7 @@ const BlogCard = ({ post }) => {
         <CardContent className="flex-1 p-6">
           <div className="flex items-center gap-2 mb-3">
             <Badge variant="secondary" className="bg-secondary/20 text-secondary-foreground">
-              {post.category}
+              {categoryLabel}
             </Badge>
           </div>
           <h3 className="text-xl font-semibold mb-2 leading-snug text-balance">

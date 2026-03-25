@@ -10,6 +10,7 @@ import Footer from '../components/Footer';
 import pb from '../lib/pocketbaseClient';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
+import { normalizeBlogCategory } from '../lib/blogCategories';
 
 const AdminDashboard = () => {
   const [posts, setPosts] = useState([]);
@@ -101,7 +102,7 @@ const AdminDashboard = () => {
                       <TableRow key={post.id}>
                         <TableCell className="font-medium">{post.title}</TableCell>
                         <TableCell>
-                          <Badge variant="secondary">{post.category}</Badge>
+                          <Badge variant="secondary">{normalizeBlogCategory(post.category) || post.category}</Badge>
                         </TableCell>
                         <TableCell>
                           <Badge variant={post.published ? 'default' : 'outline'}>

@@ -9,6 +9,7 @@ import Footer from '../components/Footer';
 import RelatedPostsSection from '../components/RelatedPostsSection';
 import pb from '../lib/pocketbaseClient';
 import { format } from 'date-fns';
+import { normalizeBlogCategory } from '../lib/blogCategories';
 
 const BlogPostPage = () => {
   const { slug } = useParams();
@@ -87,6 +88,7 @@ const BlogPostPage = () => {
   const imageUrl = post.featured_image 
     ? pb.files.getUrl(post, post.featured_image)
     : 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1200';
+  const categoryLabel = normalizeBlogCategory(post.category) || post.category;
 
   return (
     <>
@@ -107,7 +109,7 @@ const BlogPostPage = () => {
 
             <div className="mb-8">
               <Badge variant="secondary" className="mb-4 bg-secondary/20 text-secondary-foreground">
-                {post.category}
+                {categoryLabel}
               </Badge>
               <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-balance" style={{letterSpacing: '-0.02em'}}>
                 {post.title}
@@ -186,7 +188,7 @@ const BlogPostPage = () => {
           </div>
         </article>
 
-        <RelatedPostsSection currentPostId={post.id} category={post.category} />
+        <RelatedPostsSection currentPostId={post.id} category={categoryLabel} />
 
         <Footer />
       </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import pb from '../lib/pocketbaseClient';
 import BlogCard from './BlogCard';
+import { buildCategoryFilter, normalizeBlogCategory } from '../lib/blogCategories';
 
 const RelatedPostsSection = ({ currentPostId, category }) => {
   const [relatedPosts, setRelatedPosts] = useState([]);
@@ -9,8 +10,15 @@ const RelatedPostsSection = ({ currentPostId, category }) => {
   useEffect(() => {
     const fetchRelatedPosts = async () => {
       try {
+        const categoryFilter = buildCategoryFilter(category);
+
+        if (!categoryFilter) {
+          setRelatedPosts([]);
+          return;
+        }
+
         const posts = await pb.collection('blog_posts').getList(1, 4, {
-          filter: `id != "${currentPostId}" && category = "${category}" && published = true`,
+          filter: `id != "${currentPostId}" && ${categoryFilter} && published = true`,
           sort: '-created_at',
           $autoCancel: false
         });
@@ -22,8 +30,10 @@ const RelatedPostsSection = ({ currentPostId, category }) => {
       }
     };
 
-    if (category) {
+    if (normalizeBlogCategory(category)) {
       fetchRelatedPosts();
+    } else {
+      setLoading(false);
     }
   }, [currentPostId, category]);
 

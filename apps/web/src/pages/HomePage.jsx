@@ -7,6 +7,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import BlogCard from '../components/BlogCard';
 import pb from '../lib/pocketbaseClient';
+import { buildAllowedCategoriesFilter } from '../lib/blogCategories';
 
 const HomePage = () => {
   const [featuredPosts, setFeaturedPosts] = useState([]);
@@ -16,7 +17,7 @@ const HomePage = () => {
     const fetchFeaturedPosts = async () => {
       try {
         const posts = await pb.collection('blog_posts').getList(1, 6, {
-          filter: 'published = true',
+          filter: `published = true && ${buildAllowedCategoriesFilter()}`,
           sort: '-created_at',
           $autoCancel: false
         });
@@ -35,7 +36,7 @@ const HomePage = () => {
     <>
       <Helmet>
         <title>Permatable - Sustainable Living Through Permaculture</title>
-        <meta name="description" content="Learn about permaculture, composting, and sustainable living practices. Join our community dedicated to creating regenerative ecosystems." />
+        <meta name="description" content="Learn about compost, permaculture, and soil health with practical guides for regenerative growing." />
       </Helmet>
 
       <div className="min-h-screen flex flex-col">

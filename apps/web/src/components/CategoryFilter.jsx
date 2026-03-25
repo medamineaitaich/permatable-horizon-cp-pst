@@ -1,8 +1,9 @@
 import React from 'react';
 import { Button } from './ui/button';
+import { getBlogCategoryOptions } from '../lib/blogCategories';
 
 const CategoryFilter = ({ selectedCategory, onCategoryChange }) => {
-  const categories = ['All', 'Permaculture', 'Composting', 'Tips'];
+  const categories = getBlogCategoryOptions(true);
 
   return (
     <div className="flex flex-wrap gap-2">

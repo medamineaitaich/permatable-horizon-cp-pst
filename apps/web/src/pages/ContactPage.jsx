@@ -40,7 +40,7 @@ const ContactPage = () => {
     <>
       <Helmet>
         <title>Contact Us - Permatable</title>
-        <meta name="description" content="Get in touch with Permatable. We'd love to hear from you about permaculture, composting, and sustainable living." />
+        <meta name="description" content="Get in touch with Permatable about compost, permaculture, and soil health." />
       </Helmet>
 
       <div className="min-h-screen flex flex-col">
@@ -53,7 +53,7 @@ const ContactPage = () => {
                 Get in touch
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                Have questions about permaculture or sustainable living? We're here to help.
+                Have questions about compost, permaculture, or soil health? We're here to help.
               </p>
             </div>
 

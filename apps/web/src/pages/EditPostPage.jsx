@@ -13,6 +13,7 @@ import Footer from '../components/Footer';
 import RichTextEditor from '../components/RichTextEditor.jsx';
 import pb from '../lib/pocketbaseClient';
 import { toast } from 'sonner';
+import { BLOG_CATEGORIES, DEFAULT_BLOG_CATEGORY, normalizeBlogCategory } from '../lib/blogCategories';
 
 const EditPostPage = () => {
   const { id } = useParams();
@@ -23,7 +24,7 @@ const EditPostPage = () => {
     excerpt: '',
     content: '',
     author: '',
-    category: 'Permaculture',
+    category: DEFAULT_BLOG_CATEGORY,
     published: false
   });
   const [featuredImage, setFeaturedImage] = useState(null);
@@ -41,7 +42,7 @@ const EditPostPage = () => {
           excerpt: post.excerpt || '',
           content: post.content || '',
           author: post.author || '',
-          category: post.category,
+          category: normalizeBlogCategory(post.category) || DEFAULT_BLOG_CATEGORY,
           published: post.published
         });
         if (post.featured_image) {
@@ -258,9 +259,9 @@ const EditPostPage = () => {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Permaculture">Permaculture</SelectItem>
-                          <SelectItem value="Composting">Composting</SelectItem>
-                          <SelectItem value="Tips">Tips</SelectItem>
+                          {BLOG_CATEGORIES.map((category) => (
+                            <SelectItem key={category} value={category}>{category}</SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>
