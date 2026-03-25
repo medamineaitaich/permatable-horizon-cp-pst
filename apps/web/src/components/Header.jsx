@@ -78,11 +78,6 @@ const Header = () => {
           </Button>
         </>
       )}
-      {!isAuthenticated && !mobile && (
-        <Link to="/admin/login">
-          <Button variant="outline">Admin Login</Button>
-        </Link>
-      )}
     </>
   );
 
