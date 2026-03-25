@@ -6,8 +6,7 @@ import { ArrowRight } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import BlogCard from '../components/BlogCard';
-import pb from '../lib/pocketbaseClient';
-import { buildAllowedCategoriesFilter } from '../lib/blogCategories';
+import { getFeaturedPosts } from '../lib/blogContent';
 
 const HomePage = () => {
   const [featuredPosts, setFeaturedPosts] = useState([]);
@@ -16,12 +15,8 @@ const HomePage = () => {
   useEffect(() => {
     const fetchFeaturedPosts = async () => {
       try {
-        const posts = await pb.collection('blog_posts').getList(1, 6, {
-          filter: `published = true && ${buildAllowedCategoriesFilter()}`,
-          sort: '-created_at',
-          $autoCancel: false
-        });
-        setFeaturedPosts(posts.items);
+        const posts = await getFeaturedPosts(6);
+        setFeaturedPosts(posts);
       } catch (error) {
         console.error('Failed to fetch featured posts:', error);
       } finally {

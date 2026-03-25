@@ -6,8 +6,8 @@ import BlogCard from '../components/BlogCard';
 import SearchBar from '../components/SearchBar';
 import CategoryFilter from '../components/CategoryFilter';
 import PaginationComponent from '../components/PaginationComponent';
-import pb from '../lib/pocketbaseClient';
-import { ALL_BLOG_CATEGORIES, buildAllowedCategoriesFilter, buildCategoryFilter } from '../lib/blogCategories';
+import { ALL_BLOG_CATEGORIES } from '../lib/blogCategories';
+import { getPaginatedPosts } from '../lib/blogContent';
 
 const BlogListingPage = () => {
   const [posts, setPosts] = useState([]);
@@ -21,26 +21,14 @@ const BlogListingPage = () => {
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     try {
-      const filters = ['published = true', buildAllowedCategoriesFilter()];
-
-      if (selectedCategory !== ALL_BLOG_CATEGORIES) {
-        filters.push(buildCategoryFilter(selectedCategory));
-      }
-
-      if (searchTerm) {
-        const escapedSearchTerm = searchTerm.replace(/"/g, '\\"');
-        filters.push(`(title ~ "${escapedSearchTerm}" || excerpt ~ "${escapedSearchTerm}")`);
-      }
-
-      const filter = filters.filter(Boolean).join(' && ');
-
-      const result = await pb.collection('blog_posts').getList(currentPage, postsPerPage, {
-        filter,
-        sort: '-created_at',
-        $autoCancel: false
+      const result = await getPaginatedPosts({
+        currentPage,
+        postsPerPage,
+        searchTerm,
+        selectedCategory,
       });
 
-      setPosts(result.items);
+      setPosts(result.items || []);
       setTotalPages(result.totalPages);
     } catch (error) {
       console.error('Failed to fetch posts:', error);

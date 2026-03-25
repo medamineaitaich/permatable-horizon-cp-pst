@@ -1,28 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import pb from '../lib/pocketbaseClient';
 import BlogCard from './BlogCard';
-import { buildCategoryFilter, normalizeBlogCategory } from '../lib/blogCategories';
+import { normalizeBlogCategory } from '../lib/blogCategories';
+import { getRelatedPosts } from '../lib/blogContent';
 
-const RelatedPostsSection = ({ currentPostId, category }) => {
+const RelatedPostsSection = ({ currentPostId, currentPostSlug, category }) => {
   const [relatedPosts, setRelatedPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchRelatedPosts = async () => {
       try {
-        const categoryFilter = buildCategoryFilter(category);
-
-        if (!categoryFilter) {
-          setRelatedPosts([]);
-          return;
-        }
-
-        const posts = await pb.collection('blog_posts').getList(1, 4, {
-          filter: `id != "${currentPostId}" && ${categoryFilter} && published = true`,
-          sort: '-created_at',
-          $autoCancel: false
+        const posts = await getRelatedPosts({
+          currentPostId,
+          currentPostSlug,
+          category,
+          limit: 4,
         });
-        setRelatedPosts(posts.items);
+        setRelatedPosts(posts);
       } catch (error) {
         console.error('Failed to fetch related posts:', error);
       } finally {
@@ -35,7 +29,7 @@ const RelatedPostsSection = ({ currentPostId, category }) => {
     } else {
       setLoading(false);
     }
-  }, [currentPostId, category]);
+  }, [currentPostId, currentPostSlug, category]);
 
   if (loading) {
     return (

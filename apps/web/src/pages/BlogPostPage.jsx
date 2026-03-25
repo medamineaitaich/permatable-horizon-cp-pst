@@ -7,9 +7,9 @@ import { Calendar, Eye, ArrowLeft, Clock3, Facebook, Twitter, Linkedin } from 'l
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import RelatedPostsSection from '../components/RelatedPostsSection';
-import pb from '../lib/pocketbaseClient';
 import { format } from 'date-fns';
 import { normalizeBlogCategory } from '../lib/blogCategories';
+import { getPostBySlug, getPostImageUrl, incrementPostView } from '../lib/blogContent';
 
 const countWords = (html) => {
   if (!html) {
@@ -33,15 +33,15 @@ const BlogPostPage = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const result = await pb.collection('blog_posts').getFirstListItem(`slug="${slug}"`, {
-          $autoCancel: false
-        });
-        setPost(result);
+        const result = await getPostBySlug(slug);
 
-        // Increment view count
-        await pb.collection('blog_posts').update(result.id, {
-          views: (result.views || 0) + 1
-        }, { $autoCancel: false });
+        if (!result) {
+          setPost(null);
+          return;
+        }
+
+        const updatedPost = await incrementPostView(result);
+        setPost(updatedPost);
       } catch (error) {
         console.error('Failed to fetch post:', error);
       } finally {
@@ -99,9 +99,7 @@ const BlogPostPage = () => {
     );
   }
 
-  const imageUrl = post.featured_image 
-    ? pb.files.getUrl(post, post.featured_image)
-    : 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1200';
+  const imageUrl = getPostImageUrl(post);
   const categoryLabel = normalizeBlogCategory(post.category) || post.category;
   const readTime = Math.max(1, Math.ceil(countWords(post.content) / 200));
 
@@ -212,7 +210,7 @@ const BlogPostPage = () => {
           </div>
         </article>
 
-        <RelatedPostsSection currentPostId={post.id} category={categoryLabel} />
+        <RelatedPostsSection currentPostId={post.id} currentPostSlug={post.slug} category={categoryLabel} />
 
         <Footer />
       </div>

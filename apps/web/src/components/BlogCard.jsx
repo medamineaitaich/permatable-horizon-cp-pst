@@ -3,14 +3,12 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, CardFooter } from './ui/card';
 import { Badge } from './ui/badge';
 import { Calendar, Eye } from 'lucide-react';
-import pb from '../lib/pocketbaseClient';
 import { format } from 'date-fns';
 import { normalizeBlogCategory } from '../lib/blogCategories';
+import { getPostImageUrl } from '../lib/blogContent';
 
 const BlogCard = ({ post }) => {
-  const imageUrl = post.featured_image 
-    ? pb.files.getUrl(post, post.featured_image)
-    : 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800';
+  const imageUrl = getPostImageUrl(post);
   const categoryLabel = normalizeBlogCategory(post.category) || post.category;
 
   return (
