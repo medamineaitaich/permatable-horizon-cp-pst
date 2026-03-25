@@ -93,3 +93,89 @@ html {
     text-wrap: balance;
   }
 }
+
+@layer components {
+  .article-body {
+    @apply text-[1.03rem] leading-8 text-foreground;
+  }
+
+  .article-body > * + * {
+    @apply mt-6;
+  }
+
+  .article-body h2 {
+    @apply mt-14 text-3xl font-bold text-foreground;
+    letter-spacing: -0.02em;
+  }
+
+  .article-body h3 {
+    @apply mt-10 text-2xl font-semibold text-foreground;
+    letter-spacing: -0.02em;
+  }
+
+  .article-body p {
+    @apply text-foreground/90;
+  }
+
+  .article-body strong {
+    @apply font-semibold text-foreground;
+  }
+
+  .article-body ul,
+  .article-body ol {
+    @apply space-y-3 pl-6 text-foreground/90;
+  }
+
+  .article-body ul {
+    list-style: disc;
+  }
+
+  .article-body ol {
+    list-style: decimal;
+  }
+
+  .article-body li::marker {
+    color: hsl(var(--primary));
+  }
+
+  .article-body blockquote {
+    @apply rounded-2xl border-l-4 border-primary bg-accent/45 px-6 py-5 text-lg italic text-foreground;
+  }
+
+  .article-body hr {
+    @apply my-10 border-border;
+  }
+
+  .article-body a {
+    @apply font-medium text-primary underline decoration-primary/35 underline-offset-4;
+  }
+
+  .article-body .article-callout {
+    @apply rounded-[1.75rem] border border-primary/15 bg-[linear-gradient(135deg,hsla(var(--accent),0.5),hsla(var(--background),0.95))] px-6 py-6 shadow-sm;
+  }
+
+  .article-body .article-callout p {
+    @apply m-0;
+  }
+
+  .article-body .eyebrow {
+    @apply mb-3 block text-xs font-semibold uppercase tracking-[0.24em] text-primary;
+  }
+
+  .article-body .benefits-grid {
+    @apply mt-8 grid gap-5 md:grid-cols-2;
+  }
+
+  .article-body .benefit-card {
+    @apply rounded-[1.5rem] border border-border bg-muted/45 px-5 py-5 shadow-sm;
+  }
+
+  .article-body .benefit-card h3 {
+    @apply mt-0 mb-3 text-xl;
+  }
+
+  .article-body .benefit-card p,
+  .article-body .benefit-card ul {
+    @apply mt-0;
+  }
+}
